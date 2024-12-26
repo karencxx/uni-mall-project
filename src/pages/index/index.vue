@@ -1,49 +1,81 @@
 <template>
-	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view>
-			<text class="title">{{title}}</text>
-		</view>
-	</view>
+  <view class="index">
+    <!-- 顶部轮播 -->
+    <swiper class="banner" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
+      <block v-for="(item, index) in bannerList" :key="index">
+        <swiper-item>
+          <image :src="item.url" mode="aspectFill"></image>
+        </swiper-item>
+      </block>
+    </swiper>
+    
+    <!-- 功能模块 -->
+    <ModulesComp :modules="modules"></ModulesComp>
+    
+    <!-- 为你推荐 -->
+    <RecommendList :data="recommendList"></RecommendList>
+  </view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				title: 'Hello'
-			}
-		},
-		onLoad() {
+import ModulesComp from '@/components/ModulesComp.vue'
+import RecommendList from '@/components/RecommendList.vue'
 
-		},
-		methods: {
-
-		}
-	}
+const modulesList = [
+  {
+    name: '了解寺庙',
+    icon: '/static/icons/icon-home.png',
+    path: '/pages/temple/list'
+  },
+  {
+    name: '禅修活动',
+    icon: '/static/icons/icon-activity.png',
+    path: '/pages/activity/list'
+  },
+  {
+    name: '祈福许愿',
+    icon: '/static/icons/icon-pray.png',
+    path: '/pages/pray/index',
+	navigateTo: 'tab'
+  },
+  {
+    name: '法物流通',
+    icon: '/static/icons/icon-shop.png',
+    path: '/pages/shop/index',
+	navigateTo: 'tab'
+  }
+]
+export default {
+  components: {
+    ModulesComp,
+    RecommendList
+  },
+  data() {
+    return {
+      bannerList: [],
+      modules: modulesList,
+    }
+  },
+  
+  methods: {
+    navigateTo(path) {
+      uni.navigateTo({
+        url: path
+      })
+    }
+  }
+}
 </script>
 
-<style>
-	.content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin: 200rpx auto 50rpx auto;
-	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
-	}
-</style>
+<style lang="scss" scoped>
+.index {
+  .banner {
+    width: 750rpx;
+    height: 400rpx;
+    image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+</style> 

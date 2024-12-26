@@ -1,0 +1,553 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "寺庙平台-用户端",
+    "version": "1.0.0",
+    "description": "小程序接口文档"
+  },
+  "paths": {
+    "/api/user/info": {
+      "get": {
+        "summary": "获取用户信息",
+        "tags": ["用户"],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/login": {
+      "post": {
+        "summary": "用户登录",
+        "tags": ["用户"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "微信登录code"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "登录成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pray/list": {
+      "get": {
+        "summary": "获取祈福列表",
+        "tags": ["祈福"],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PrayItem"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pray/detail": {
+      "get": {
+        "summary": "获取祈福详情",
+        "tags": ["祈福"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrayDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pray/order": {
+      "post": {
+        "summary": "提交祈福订单",
+        "tags": ["祈福"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrayOrderSubmit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功"
+          }
+        }
+      }
+    },
+    "/api/pray-order/list": {
+      "get": {
+        "summary": "获取祈福订单列表",
+        "tags": ["祈福订单"],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["all", "pending", "finished"]
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PrayOrder"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pray-order/detail": {
+      "get": {
+        "summary": "获取祈福订单详情",
+        "tags": ["祈福订单"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrayOrderDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shop-order/list": {
+      "get": {
+        "summary": "获取商城订单列表",
+        "tags": ["商城订单"],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["all", "unpaid", "unshipped", "unreceived", "finished"]
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ShopOrder"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/shop-order/detail": {
+      "get": {
+        "summary": "获取商城订单详情",
+        "tags": ["商城订单"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShopOrderDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "avatar": {
+            "type": "string",
+            "description": "头像URL"
+          },
+          "nickname": {
+            "type": "string",
+            "description": "昵称"
+          },
+          "phone": {
+            "type": "string",
+            "description": "手机号"
+          }
+        }
+      },
+      "PrayItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "description": "祈福名称"
+          },
+          "image": {
+            "type": "string",
+            "description": "图片URL"
+          },
+          "price": {
+            "type": "integer",
+            "description": "价格(分)"
+          },
+          "desc": {
+            "type": "string",
+            "description": "描述"
+          }
+        }
+      },
+      "PrayDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer"
+          },
+          "desc": {
+            "type": "string"
+          },
+          "notice": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "skuList": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PrayOrderSubmit": {
+        "type": "object",
+        "properties": {
+          "skuId": {
+            "type": "integer"
+          },
+          "num": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "description": "祈福者姓名"
+          },
+          "type": {
+            "type": "string",
+            "description": "祈福类型"
+          },
+          "wish": {
+            "type": "string",
+            "description": "祈福祝语"
+          }
+        },
+        "required": ["skuId", "num", "name", "type", "wish"]
+      },
+      "PrayOrder": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "typeName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "createTime": {
+            "type": "string"
+          },
+          "num": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "finished"]
+          },
+          "statusText": {
+            "type": "string"
+          }
+        }
+      },
+      "PrayOrderDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "typeName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "wish": {
+            "type": "string"
+          },
+          "createTime": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "statusText": {
+            "type": "string"
+          },
+          "videoUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "ShopOrder": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "orderNo": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer"
+          },
+          "num": {
+            "type": "integer"
+          },
+          "totalAmount": {
+            "type": "integer"
+          },
+          "createTime": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["unpaid", "unshipped", "unreceived", "finished"]
+          },
+          "statusText": {
+            "type": "string"
+          }
+        }
+      },
+      "ShopOrderDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "orderNo": {
+            "type": "string"
+          },
+          "goodsList": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "image": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "integer"
+                },
+                "num": {
+                  "type": "integer"
+                },
+                "sku": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "totalAmount": {
+            "type": "integer"
+          },
+          "expressAmount": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "statusText": {
+            "type": "string"
+          },
+          "express": {
+            "type": "object",
+            "properties": {
+              "company": {
+                "type": "string"
+              },
+              "no": {
+                "type": "string"
+              }
+            }
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "phone": {
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              }
+            }
+          },
+          "createTime": {
+            "type": "string"
+          },
+          "payTime": {
+            "type": "string"
+          },
+          "shipTime": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
